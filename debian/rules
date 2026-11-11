@@ -144,6 +144,10 @@ LIBVIRT_SYSTEM_SERVICES = \
 	$(NULL)
 
 
+# XDR moved out of libc. libtirpc headers live in /usr/include/tirpc.
+export DEB_CFLAGS_MAINT_APPEND := $(shell pkg-config --cflags libtirpc)
+export DEB_LDFLAGS_MAINT_APPEND := $(shell pkg-config --libs libtirpc)
+
 DEB_BUILDDIR := $(CURDIR)/debian/build
 LOGROTATE = $(basename $(basename $(notdir $(wildcard src/remote/libvirtd*.logrotate.in))))
 EXAMPLES_DIR = $(CURDIR)/debian/libvirt-doc/usr/share/doc/libvirt-doc/examples/
