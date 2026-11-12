@@ -161,11 +161,9 @@ override_dh_auto_configure:
 	EBTABLES_PATH=/usr/sbin/ebtables \
 	dh_auto_configure -- $(DEB_CONFIGURE_EXTRA_ARGS) $(shell dpkg-buildflags --export=configure)
 	mkdir -p debian/build/docs/internals
-
-# Debian 13's xsltproc rejects empty QNames in the 5.0 API stylesheet.
-# Ship the HTML that is already in the tarball instead of regenerating it.
-override_dh_auto_build:
-	dh_auto_build -- SUBDIRS=". gnulib/lib include/libvirt src tools gnulib/tests tests po examples"
+	# Debian 13's xsltproc rejects empty QNames in the 5.0 API stylesheet.
+	# Keep the HTML already in the tarball; do not rebuild it.
+	sed -i 's/^all-am: web$$/all-am:/' debian/build/docs/Makefile
 
 override_dh_auto_test:
 	export LD_PRELOAD="";     \
